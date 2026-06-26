@@ -10,37 +10,40 @@ export default function MobileExperience() {
     <>
       <Preloader />
       <main className="relative w-full bg-carbon">
-        <section className="relative min-h-screen overflow-hidden px-6 pb-12 pt-[max(5.5rem,14vh)]">
-          <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <section className="relative overflow-hidden bg-carbon">
+          <div className="px-6 pb-6 pt-[max(5.5rem,14vh)]">
+            <div className="flex max-w-3xl flex-col gap-5 text-left">
+              <div className="flex flex-col gap-5">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/60">
+                  <span className="text-papaya">McLaren Racing</span>
+                  <span className="h-3 w-px bg-white/30" />
+                  <span className="text-alteryx-bright">Alteryx</span>
+                </div>
+                <span className="inline-block w-fit rounded-full border border-papaya/40 bg-papaya/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.3em] text-papaya">
+                  Customer Story
+                </span>
+              </div>
+
+              <h1 className="font-display text-3xl font-semibold leading-[1.05] tracking-tight text-white">
+                <span className="block">Fast-Tracking Data</span>
+                <span className="block text-papaya">in the Race to Accelerate</span>
+              </h1>
+            </div>
+          </div>
+
+          <div className="relative h-[42vh] min-h-[240px] w-full overflow-hidden">
             <img
               data-hero-video
               src="/video/mclaren-poster.jpg"
               alt=""
               className="h-full w-full object-cover"
-              style={{ objectPosition: "78% 62%" }}
+              style={{ objectPosition: "72% 58%" }}
               draggable={false}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-carbon/75 via-carbon/25 to-carbon/40" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(7,8,12,0.55)_0%,transparent_55%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-carbon via-transparent to-carbon/90" />
           </div>
 
-          <div className="relative z-10 flex max-w-3xl flex-col gap-5 text-left">
-            <div className="flex flex-col gap-5">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/60">
-                <span className="text-papaya">McLaren Racing</span>
-                <span className="h-3 w-px bg-white/30" />
-                <span className="text-alteryx-bright">Alteryx</span>
-              </div>
-              <span className="inline-block w-fit rounded-full border border-papaya/40 bg-papaya/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.3em] text-papaya">
-                Customer Story
-              </span>
-            </div>
-
-            <h1 className="font-display text-3xl font-semibold leading-[1.05] tracking-tight text-white">
-              <span className="block">Fast-Tracking Data</span>
-              <span className="block text-papaya">in the Race to Accelerate</span>
-            </h1>
-
+          <div className="px-6 pb-12 pt-6">
             <p className="max-w-md text-sm leading-relaxed text-white/80">
               Over 20 race weekends. 1.5 TB of data each. McLaren Racing uses
               Alteryx to collect, process, and act on it all — accelerating
