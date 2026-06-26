@@ -177,7 +177,7 @@ export default function StatsSection() {
         data-stats-pin
         className="relative min-h-[calc(100dvh-6rem)] sm:ml-auto sm:min-h-0 sm:w-full sm:max-w-xl sm:text-right"
       >
-        <div className="max-w-[18rem] text-left sm:max-w-none">
+        <div className="w-full max-w-none text-left sm:max-w-none">
           <h2 className="font-display text-2xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
             Data-driven decisions at{" "}
             <span className="text-papaya">tremendous speed</span>
@@ -189,7 +189,7 @@ export default function StatsSection() {
           </p>
         </div>
 
-        <div className="absolute bottom-8 left-0 z-10 max-w-[15rem] sm:static sm:bottom-auto sm:mt-10 sm:max-w-none">
+        <div className="absolute bottom-8 left-0 right-0 z-10 w-full sm:static sm:bottom-auto sm:mt-10 sm:max-w-none">
           <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-white/15 bg-carbon/80 shadow-[0_12px_40px_rgba(0,0,0,0.4)] backdrop-blur-md sm:divide-y sm:divide-white/10">
           {STATS.map((stat, i) => (
             <div

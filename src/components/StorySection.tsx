@@ -40,11 +40,10 @@ export default function StorySection({ mobileLayout = false }: StorySectionProps
         items={SCROLL_WORDS}
         scrollDistance={mobileLayout ? "200vh" : "320vh"}
         pinStart="top top"
-        className="bg-carbon"
-        textClassName="font-display text-white"
+        className={mobileLayout ? "bg-carbon px-3" : "bg-carbon"}
         fontSize={
           mobileLayout
-            ? "clamp(2.25rem, 11vw, 4rem)"
+            ? "clamp(1.5rem, 7vw, 2.75rem)"
             : "clamp(3rem, 10vw, 7.5rem)"
         }
         fontWeight={700}
@@ -54,6 +53,11 @@ export default function StorySection({ mobileLayout = false }: StorySectionProps
         perspective={mobileLayout ? 700 : 1000}
         startRotation={0}
         endRotation={mobileLayout ? MOBILE_END_ROTATION : END_ROTATION}
+        textClassName={
+          mobileLayout
+            ? "font-display text-white tracking-tight"
+            : "font-display text-white"
+        }
       />
     </section>
   );
