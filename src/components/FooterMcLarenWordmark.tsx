@@ -6,6 +6,8 @@ const WORDMARK_STYLE = {
   fontSize: "inherit" as const,
   letterSpacing: "0.12em",
   paddingLeft: "0.12em",
+  textShadow:
+    "0 -1.5px 0 rgba(255,128,0,0.55), 1.5px 0 0 rgba(255,128,0,0.55), 0 1.5px 0 rgba(255,128,0,0.55), -1.5px 0 0 rgba(255,128,0,0.55), 1px 1px 0 rgba(255,128,0,0.4), -1px -1px 0 rgba(255,128,0,0.4), 1px -1px 0 rgba(255,128,0,0.4), -1px 1px 0 rgba(255,128,0,0.4)",
 };
 
 export default function FooterMcLarenWordmark() {
@@ -107,17 +109,10 @@ export default function FooterMcLarenWordmark() {
       }}
     >
       <div
-        className="pointer-events-none absolute inset-0 flex justify-center whitespace-nowrap font-bold uppercase leading-none"
+        className="pointer-events-none absolute inset-0 flex justify-center whitespace-nowrap font-bold uppercase leading-none text-carbon"
         style={WORDMARK_STYLE}
       >
-        <span
-          style={{
-            color: "transparent",
-            WebkitTextStroke: "1.5px rgba(255,128,0,0.55)",
-          }}
-        >
-          McLaren
-        </span>
+        McLaren
       </div>
 
       <div
@@ -125,6 +120,7 @@ export default function FooterMcLarenWordmark() {
         className="pointer-events-none absolute inset-0 flex justify-center whitespace-nowrap font-bold uppercase leading-none text-papaya"
         style={{
           ...WORDMARK_STYLE,
+          textShadow: "none",
           WebkitMaskImage: maskImage,
           maskImage,
           WebkitMaskRepeat: "no-repeat",
