@@ -11,6 +11,7 @@ import {
   useGLTF,
 } from "@react-three/drei";
 import type { Mesh } from "three";
+import { isMobileExperience } from "@/lib/device";
 
 const MODEL_URL = "/models/mclaren-mcl-38.glb";
 
@@ -40,8 +41,6 @@ function CarModel() {
   );
 }
 
-useGLTF.preload(MODEL_URL);
-
 function LoadingFallback({ light }: { light: boolean }) {
   return (
     <Html center>
@@ -56,8 +55,16 @@ export default function CarModelViewer({
   variant = "studio",
 }: CarModelViewerProps) {
   const [interactive, setInteractive] = useState(false);
+  const [mobile, setMobile] = useState(true);
   const isShowroom = variant === "showroom";
   const isStudio = variant === "studio";
+
+  useEffect(() => {
+    setMobile(isMobileExperience());
+    if (!isMobileExperience()) {
+      useGLTF.preload(MODEL_URL);
+    }
+  }, []);
 
   const bg = isShowroom ? "#f7f7f5" : isStudio ? "#161922" : "#0d0f16";
 
@@ -65,9 +72,14 @@ export default function CarModelViewer({
     <div className="relative h-full w-full">
       <div className={interactive ? "h-full w-full" : "pointer-events-none h-full w-full"}>
         <Canvas
-          shadows
+          shadows={!mobile}
+          dpr={mobile ? 1 : [1, 2]}
           camera={{ position: [6.7, 2, 8.8], fov: 35 }}
-          gl={{ antialias: true, alpha: true }}
+          gl={{
+            antialias: !mobile,
+            alpha: true,
+            powerPreference: mobile ? "low-power" : "high-performance",
+          }}
           onCreated={({ gl }) => {
             gl.setClearColor(bg, 1);
           }}
@@ -76,8 +88,8 @@ export default function CarModelViewer({
           <directionalLight
             position={[10, 14, 8]}
             intensity={isShowroom ? 1.6 : isStudio ? 1.35 : 1.25}
-            castShadow
-            shadow-mapSize={[1024, 1024]}
+            castShadow={!mobile}
+            shadow-mapSize={mobile ? [512, 512] : [1024, 1024]}
           />
           <directionalLight
             position={[-8, 6, -6]}
@@ -93,16 +105,20 @@ export default function CarModelViewer({
           ) : null}
           <Suspense fallback={<LoadingFallback light={isShowroom} />}>
             <CarModel />
-            <Environment
-              preset={isShowroom ? "studio" : isStudio ? "city" : "city"}
-            />
-            <ContactShadows
-              position={[0, -0.85, 0]}
-              opacity={isShowroom ? 0.28 : isStudio ? 0.38 : 0.45}
-              scale={14}
-              blur={2.5}
-              far={4}
-            />
+            {!mobile ? (
+              <Environment
+                preset={isShowroom ? "studio" : isStudio ? "city" : "city"}
+              />
+            ) : null}
+            {!mobile ? (
+              <ContactShadows
+                position={[0, -0.85, 0]}
+                opacity={isShowroom ? 0.28 : isStudio ? 0.38 : 0.45}
+                scale={14}
+                blur={2.5}
+                far={4}
+              />
+            ) : null}
           </Suspense>
           <OrbitControls
             enableRotate={interactive}

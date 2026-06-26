@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
+import { isMobileExperience, shouldReduceMotion } from "@/lib/device";
+
 export default function SmoothScroll({
   children,
 }: {
@@ -25,7 +27,7 @@ export default function SmoothScroll({
     };
     hideNativeScrollbar();
 
-    if (prefersReduced) return;
+    if (prefersReduced || isMobileExperience()) return;
 
     const lenis = new Lenis({
       duration: 1.7,

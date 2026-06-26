@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { isMobileExperience, shouldReduceMotion } from "@/lib/device";
 
 const WORDMARK_STYLE = {
   fontSize: "inherit" as const,
@@ -10,20 +11,27 @@ const WORDMARK_STYLE = {
     "0 -1.5px 0 rgba(255,128,0,0.55), 1.5px 0 0 rgba(255,128,0,0.55), 0 1.5px 0 rgba(255,128,0,0.55), -1.5px 0 0 rgba(255,128,0,0.55), 1px 1px 0 rgba(255,128,0,0.4), -1px -1px 0 rgba(255,128,0,0.4), 1px -1px 0 rgba(255,128,0,0.4), -1px 1px 0 rgba(255,128,0,0.4)",
 };
 
+function applyMask(el: HTMLElement, x: number, y: number) {
+  const maskImage = `radial-gradient(circle min(42vw, 460px) at ${x}px ${y}px, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.55) 20%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.08) 80%, transparent 100%)`;
+  el.style.webkitMaskImage = maskImage;
+  el.style.maskImage = maskImage;
+}
+
 export default function FooterMcLarenWordmark() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
-  const [mask, setMask] = useState({ x: -9999, y: -9999 });
+  const [enableReveal, setEnableReveal] = useState(false);
   const targetRef = useRef({ x: -9999, y: -9999 });
   const currentRef = useRef({ x: -9999, y: -9999 });
   const cursorRef = useRef<{ x: number; y: number } | null>(null);
   const lastMoveRef = useRef(0);
 
   useEffect(() => {
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReduced) return;
+    setEnableReveal(!isMobileExperience() && !shouldReduceMotion());
+  }, []);
+
+  useEffect(() => {
+    if (!enableReveal) return;
 
     const el = sectionRef.current;
     if (!el) return;
@@ -45,13 +53,10 @@ export default function FooterMcLarenWordmark() {
       el.removeEventListener("mousemove", onMove);
       el.removeEventListener("mouseleave", onLeave);
     };
-  }, []);
+  }, [enableReveal]);
 
   useEffect(() => {
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReduced) return;
+    if (!enableReveal) return;
 
     let raf = 0;
     const start = performance.now();
@@ -85,15 +90,14 @@ export default function FooterMcLarenWordmark() {
               (targetRef.current.y - currentRef.current.y) * lerp,
           };
         }
-        setMask({ ...currentRef.current });
+
+        applyMask(h, currentRef.current.x, currentRef.current.y);
       }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
-
-  const maskImage = `radial-gradient(circle min(42vw, 460px) at ${mask.x}px ${mask.y}px, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.55) 20%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.08) 80%, transparent 100%)`;
+  }, [enableReveal]);
 
   return (
     <div
@@ -115,20 +119,20 @@ export default function FooterMcLarenWordmark() {
         McLaren
       </div>
 
-      <div
-        ref={headingRef}
-        className="pointer-events-none absolute inset-0 flex justify-center whitespace-nowrap font-bold uppercase leading-none text-papaya"
-        style={{
-          ...WORDMARK_STYLE,
-          textShadow: "none",
-          WebkitMaskImage: maskImage,
-          maskImage,
-          WebkitMaskRepeat: "no-repeat",
-          maskRepeat: "no-repeat",
-        }}
-      >
-        McLaren
-      </div>
+      {enableReveal ? (
+        <div
+          ref={headingRef}
+          className="pointer-events-none absolute inset-0 flex justify-center whitespace-nowrap font-bold uppercase leading-none text-papaya"
+          style={{
+            ...WORDMARK_STYLE,
+            textShadow: "none",
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+          }}
+        >
+          McLaren
+        </div>
+      ) : null}
     </div>
   );
 }

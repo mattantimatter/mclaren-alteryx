@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { isMobileExperience } from "@/lib/device";
 
 const SIZE = 200;
 const CENTER = SIZE / 2;
@@ -14,7 +15,29 @@ const ARC_VISIBLE = (SWEEP / 360) * CIRC;
 function videoReady(timeoutMs = 5000): Promise<void> {
   return new Promise((resolve) => {
     const done = () => resolve();
-    const timer = window.setTimeout(done, timeoutMs);
+    const mobile = typeof window !== "undefined" && isMobileExperience();
+    const timer = window.setTimeout(done, mobile ? 1200 : timeoutMs);
+
+    if (mobile) {
+      const img = document.querySelector<HTMLImageElement>(
+        "img[data-hero-video]",
+      );
+      if (img?.complete) {
+        window.clearTimeout(timer);
+        done();
+        return;
+      }
+      img?.addEventListener(
+        "load",
+        () => {
+          window.clearTimeout(timer);
+          done();
+        },
+        { once: true },
+      );
+      return;
+    }
+
     const check = () => {
       const v = document.querySelector<HTMLVideoElement>("video[data-hero-video]");
       if (!v) {
