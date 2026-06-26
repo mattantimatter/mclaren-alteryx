@@ -1,14 +1,9 @@
 "use client";
 
 import Preloader from "@/components/Preloader";
+import StatsSection from "@/components/StatsSection";
 import StorySection from "@/components/StorySection";
 import Footer from "@/components/Footer";
-
-const STATS = [
-  { value: "300M", label: "trackside analytics support 300M race simulations" },
-  { value: "11.8B", label: "data points consolidated to optimize race performance" },
-  { value: "300", label: "telemetry sensors on each race car generate 100K data parameters" },
-] as const;
 
 export default function MobileExperience() {
   return (
@@ -54,35 +49,9 @@ export default function MobileExperience() {
           </div>
         </section>
 
-        <section className="relative z-10 px-6 pb-16 pt-8">
-          <div className="max-w-xl">
-            <h2 className="font-display text-2xl font-bold tracking-tight text-white">
-              Data-driven decisions at{" "}
-              <span className="text-papaya">tremendous speed</span>
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-white/75">
-              Everything across design, build, and race is completely data-driven.
-              Advanced analytics with Alteryx underpin McLaren&apos;s competitive
-              edge.
-            </p>
+        <StatsSection />
 
-            <div className="mt-8 flex flex-col overflow-hidden rounded-2xl border border-white/15 bg-carbon/80 shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
-              {STATS.map((stat) => (
-                <div
-                  key={stat.value}
-                  className="flex flex-col gap-2 border-b border-white/10 px-4 py-4 text-left last:border-b-0"
-                >
-                  <div className="font-display text-3xl font-extrabold tracking-tight text-white">
-                    <span className="text-papaya">{stat.value}</span>
-                  </div>
-                  <p className="text-sm leading-relaxed text-white/85">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <StorySection />
+        <StorySection mobileLayout />
 
         <section className="bg-carbon px-6 pb-24 pt-8">
           <div className="mx-auto max-w-3xl text-center">

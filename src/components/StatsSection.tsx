@@ -95,7 +95,10 @@ export default function StatsSection() {
       const section = sectionRef.current;
       const pinEl = pinRef.current;
       const videoStage = document.querySelector("[data-video-scroll-stage]");
-      const items = gsap.utils.toArray<HTMLDivElement>(".stat-item");
+      const items = gsap.utils.toArray<HTMLDivElement>(
+        ".stat-item",
+        section,
+      );
 
       ScrollTrigger.matchMedia({
         "(min-width: 640px)": () => {

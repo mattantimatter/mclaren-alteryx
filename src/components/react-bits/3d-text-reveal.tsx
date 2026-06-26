@@ -18,6 +18,7 @@ export interface ThreeDTextRevealProps {
   fontSize?: string;
   fontWeight?: number;
   gap?: number;
+  mobileOptimized?: boolean;
 }
 
 const ThreeDTextReveal: React.FC<ThreeDTextRevealProps> = ({
@@ -34,6 +35,7 @@ const ThreeDTextReveal: React.FC<ThreeDTextRevealProps> = ({
   fontSize = "clamp(3rem, 9vw, 7rem)",
   fontWeight = 900,
   gap = 15,
+  mobileOptimized = false,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,6 +44,8 @@ const ThreeDTextReveal: React.FC<ThreeDTextRevealProps> = ({
   useGSAP(
     () => {
       if (!wrapperRef.current || !containerRef.current) return;
+
+      let timeline: gsap.core.Timeline | null = null;
 
       const updatePositions = () => {
         const radius = window.innerHeight * radiusOffset;
@@ -63,39 +67,60 @@ const ThreeDTextReveal: React.FC<ThreeDTextRevealProps> = ({
             xPercent: -50,
             yPercent: -50,
             transformOrigin: "50% 50%",
-            force3D: true,
+            force3D: !mobileOptimized,
           });
         });
       };
 
-      updatePositions();
+      const build = () => {
+        updatePositions();
+
+        timeline?.scrollTrigger?.kill();
+        timeline?.kill();
+
+        timeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: wrapperRef.current,
+            start: pinStart,
+            end: `+=${scrollDistance}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: scrubSmoothing,
+            anticipatePin: mobileOptimized ? 0 : 1,
+            invalidateOnRefresh: true,
+            ...(mobileOptimized ? { pinType: "transform" } : {}),
+          },
+        });
+
+        timeline.fromTo(
+          containerRef.current,
+          { rotateX: startRotation },
+          { rotateX: endRotation, ease: "none", force3D: !mobileOptimized },
+        );
+
+        ScrollTrigger.refresh();
+      };
 
       const refreshHandler = () => updatePositions();
       ScrollTrigger.addEventListener("refresh", refreshHandler);
 
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: wrapperRef.current,
-          start: pinStart,
-          end: `+=${scrollDistance}`,
-          pin: true,
-          pinSpacing: true,
-          scrub: scrubSmoothing,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      timeline.fromTo(
-        containerRef.current,
-        { rotateX: startRotation },
-        { rotateX: endRotation, ease: "none" },
-      );
-
-      ScrollTrigger.refresh();
+      if (mobileOptimized) {
+        let started = false;
+        const start = () => {
+          if (started) return;
+          started = true;
+          build();
+        };
+        window.addEventListener("preloader:complete", start, { once: true });
+        window.setTimeout(start, 2500);
+      } else {
+        build();
+      }
 
       return () => {
         ScrollTrigger.removeEventListener("refresh", refreshHandler);
+        timeline?.scrollTrigger?.kill();
+        timeline?.kill();
       };
     },
     {
@@ -108,6 +133,8 @@ const ThreeDTextReveal: React.FC<ThreeDTextRevealProps> = ({
         scrubSmoothing,
         pinStart,
         gap,
+        mobileOptimized,
+        perspective,
       ],
       scope: wrapperRef,
     },
@@ -117,18 +144,25 @@ const ThreeDTextReveal: React.FC<ThreeDTextRevealProps> = ({
     <div
       ref={wrapperRef}
       className={cn(
-        "relative flex h-screen w-full flex-col items-center justify-center overflow-hidden",
+        "relative flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden",
         className,
       )}
       style={{
         perspective: `${perspective}px`,
+        WebkitPerspective: `${perspective}px`,
         transformStyle: "preserve-3d",
+        WebkitTransformStyle: "preserve-3d",
+        isolation: mobileOptimized ? "isolate" : undefined,
       }}
     >
       <div
         ref={containerRef}
         className="absolute inset-0 text-center"
-        style={{ transformStyle: "preserve-3d" }}
+        style={{
+          transformStyle: "preserve-3d",
+          WebkitTransformStyle: "preserve-3d",
+          willChange: mobileOptimized ? "transform" : undefined,
+        }}
       >
         {items.map((item, index) => (
           <div
@@ -144,7 +178,9 @@ const ThreeDTextReveal: React.FC<ThreeDTextRevealProps> = ({
               fontSize,
               fontWeight,
               backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
               transformStyle: "preserve-3d",
+              WebkitTransformStyle: "preserve-3d",
             }}
           >
             {item}
