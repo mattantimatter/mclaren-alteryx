@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# McLaren Racing × Alteryx — Scroll Experience
 
-## Getting Started
+A cinematic, scroll-driven landing page reimagining the [McLaren x Alteryx customer story](https://www.alteryx.com/resources/customer-story/mclaren-racing-fast-tracks-data-analytics-in-the-race-to-accelerate). The hero and first section share a video background whose playhead is scrubbed by scroll position, fronted by a speedometer-style preloader.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) + **TypeScript**
+- **Tailwind CSS v4** (theme tokens in `src/app/globals.css`)
+- **GSAP** + **ScrollTrigger** + `@gsap/react` (`useGSAP`) for scroll animation
+- **Lenis** for smooth scrolling
+- Fonts: **Sora** (display) + **Inter** (body) via `next/font`
+
+## How it works
+
+- `components/VideoScrollStage.tsx` — full-viewport `sticky` video; a `ScrollTrigger` maps scroll progress to `video.currentTime`, scrubbing the clip as you scroll through the hero + stats.
+- `components/Preloader.tsx` — SVG speedometer gauge (arc + needle + counter) that revs up and waits on `document.fonts.ready` + video `canplaythrough` before dismissing.
+- `components/Hero.tsx` — headline lockup with intro + parallax.
+- `components/StatsSection.tsx` — count-up of `300M / 11.8B / 300` on enter.
+- `components/StorySection.tsx` — Design / Build / Race pillars with batched reveals.
+
+Respects `prefers-reduced-motion`: smooth scroll, video scrubbing, and reveals fall back to static content.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The background video lives at `public/video/mclaren.mp4` with a poster at `public/video/mclaren-poster.jpg`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> Concept/demo only. Not affiliated with or endorsed by McLaren or Alteryx.
