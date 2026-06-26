@@ -61,9 +61,6 @@ export default function CarModelViewer({
 
   useEffect(() => {
     setMobile(isMobileExperience());
-    if (!isMobileExperience()) {
-      useGLTF.preload(MODEL_URL);
-    }
   }, []);
 
   const bg = isShowroom ? "#f7f7f5" : isStudio ? "#161922" : "#0d0f16";

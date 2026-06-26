@@ -2,6 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { useGLTF } from "@react-three/drei";
+import { isMobileExperience } from "@/lib/device";
+
+const MODEL_URL = "/models/mclaren-mcl-38.glb";
 
 const CarModelViewer = dynamic(() => import("@/components/CarModelViewer"), {
   ssr: false,
@@ -12,11 +16,27 @@ const CarModelViewer = dynamic(() => import("@/components/CarModelViewer"), {
   ),
 });
 
+function preloadDesktopModel() {
+  useGLTF.preload(MODEL_URL);
+  void import("@/components/CarModelViewer");
+}
+
 export function McLarenModelSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
+    if (!isMobileExperience()) {
+      const start = () => {
+        preloadDesktopModel();
+        setShouldLoad(true);
+      };
+
+      start();
+      window.addEventListener("preloader:complete", start);
+      return () => window.removeEventListener("preloader:complete", start);
+    }
+
     const el = sectionRef.current;
     if (!el) return;
 
@@ -60,7 +80,7 @@ export function McLarenModelSection() {
               <CarModelViewer variant="studio" />
             ) : (
               <div className="flex h-full min-h-[420px] items-center justify-center">
-                <span className="text-sm text-white/50">Scroll to load 3D model</span>
+                <span className="text-sm text-white/50">Loading 3D model…</span>
               </div>
             )}
           </div>
