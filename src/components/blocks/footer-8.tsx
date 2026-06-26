@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import FooterMcLarenWordmark from "@/components/FooterMcLarenWordmark";
 
 const STORY_URL =
   "https://www.alteryx.com/resources/customer-story/mclaren-racing-fast-tracks-data-analytics-in-the-race-to-accelerate";
@@ -129,30 +130,7 @@ export default function Footer8() {
           ))}
         </div>
 
-        <div
-          className="relative mt-16 w-full sm:mt-20"
-          aria-hidden="true"
-          style={{
-            fontSize: "min(14.2vw, 210px)",
-            height: "0.74em",
-            maskImage: "linear-gradient(to bottom, #000 50%, transparent 95%)",
-            WebkitMaskImage:
-              "linear-gradient(to bottom, #000 50%, transparent 95%)",
-          }}
-        >
-          <div
-            className="absolute inset-0 flex justify-center whitespace-nowrap font-bold uppercase leading-none text-carbon"
-            style={{
-              fontSize: "inherit",
-              letterSpacing: "0.12em",
-              paddingLeft: "0.12em",
-              textShadow:
-                "0 -1.5px 0 rgba(255,128,0,0.55), 1.5px 0 0 rgba(255,128,0,0.55), 0 1.5px 0 rgba(255,128,0,0.55), -1.5px 0 0 rgba(255,128,0,0.55), 1px 1px 0 rgba(255,128,0,0.4), -1px -1px 0 rgba(255,128,0,0.4), 1px -1px 0 rgba(255,128,0,0.4), -1px 1px 0 rgba(255,128,0,0.4)",
-            }}
-          >
-            McLaren
-          </div>
-        </div>
+        <FooterMcLarenWordmark />
 
         <div className="flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:text-sm">
           <p>
