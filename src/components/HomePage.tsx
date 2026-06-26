@@ -9,13 +9,7 @@ export default function HomePage() {
   const [mobile, setMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const touch = isMobileExperience();
-    setMobile(touch);
-    if (touch) {
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-      window.dispatchEvent(new Event("preloader:complete"));
-    }
+    setMobile(isMobileExperience());
   }, []);
 
   if (mobile === null) {
