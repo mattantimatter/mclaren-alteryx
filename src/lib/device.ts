@@ -1,3 +1,11 @@
+export function isIOS(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  );
+}
+
 export function isTouchDevice(): boolean {
   if (typeof window === "undefined") return false;
   return (
@@ -17,5 +25,5 @@ export function shouldReduceMotion(): boolean {
 }
 
 export function isMobileExperience(): boolean {
-  return isMobileViewport() || isTouchDevice();
+  return isIOS() || isMobileViewport() || isTouchDevice();
 }
