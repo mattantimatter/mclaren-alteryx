@@ -97,7 +97,7 @@ export default function StatsSection() {
       const videoStage = document.querySelector("[data-video-scroll-stage]");
       const items = gsap.utils.toArray<HTMLDivElement>(".stat-item");
 
-      const mm = ScrollTrigger.matchMedia({
+      ScrollTrigger.matchMedia({
         "(min-width: 640px)": () => {
           if (!section || !pinEl || !videoStage) return;
 
@@ -158,7 +158,6 @@ export default function StatsSection() {
       window.addEventListener("preloader:complete", refresh);
 
       return () => {
-        mm.revert();
         window.removeEventListener("preloader:complete", refresh);
       };
     },
