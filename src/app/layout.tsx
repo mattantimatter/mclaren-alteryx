@@ -11,20 +11,38 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000",
+  ),
   title: "McLaren Racing x Alteryx | Fast-Tracking Data Analytics",
   description:
     "How McLaren Racing uses Alteryx to fast-track data analytics across design, build, and race — turning 11.8 billion data points into a competitive edge.",
+  openGraph: {
+    title: "McLaren Racing x Alteryx | Fast-Tracking Data Analytics",
+    description:
+      "How McLaren Racing uses Alteryx to fast-track data analytics across design, build, and race — turning 11.8 billion data points into a competitive edge.",
+    images: [
+      {
+        url: "/og.jpg",
+        width: 1024,
+        height: 559,
+        alt: "McLaren Racing x Alteryx — Fast-Tracking Data in the Race to Accelerate",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "McLaren Racing x Alteryx | Fast-Tracking Data Analytics",
+    description:
+      "How McLaren Racing uses Alteryx to fast-track data analytics across design, build, and race — turning 11.8 billion data points into a competitive edge.",
+    images: ["/og.jpg"],
+  },
   icons: {
-    icon: [
-      { url: "/favicon-papaya.png" },
-      { url: "/favicon.png", media: "(prefers-color-scheme: light)" },
-      { url: "/favicon-papaya.png", media: "(prefers-color-scheme: dark)" },
-    ],
-    apple: [
-      { url: "/favicon-papaya.png" },
-      { url: "/favicon.png", media: "(prefers-color-scheme: light)" },
-      { url: "/favicon-papaya.png", media: "(prefers-color-scheme: dark)" },
-    ],
+    icon: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
